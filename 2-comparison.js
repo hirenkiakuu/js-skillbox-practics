@@ -12,7 +12,7 @@ let bNormalized = Math.floor(
 );
 
 console.log(aNormalized, bNormalized);
-// (>, <, ≥, ≤, ===, ≠)
+
 console.log(`${aNormalized} > ${bNormalized}: ${aNormalized > bNormalized}`);
 console.log(`${aNormalized} < ${bNormalized}: ${aNormalized < bNormalized}`);
 console.log(`${aNormalized} ≥ ${bNormalized}: ${aNormalized >= bNormalized}`);
