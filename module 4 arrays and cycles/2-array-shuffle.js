@@ -8,7 +8,7 @@ for (let i = 0; i < count; ++i) {
 console.log('первоначальный массив:\n', arr);
 
 for (let i = 0; i < count; ++i) {  
-    let j = Math.round(Math.random() * (count - 1));
+    let j = Math.floor(Math.random() * count);
 
     let temp = arr[i];
     arr[i] = arr[j];
