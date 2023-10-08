@@ -1,8 +1,8 @@
 let userName = 'TonY';
 let userSurname = 'STarK';
 
-userNameModified = userName.substring(0, 1).toUpperCase() + userName.substring(1).toLowerCase();
-userSurnameModified = userSurname.substring(0, 1).toUpperCase() + userSurname.substring(1).toLowerCase();
+userNameModified = userName[0].toUpperCase() + userName.substring(1).toLowerCase();
+userSurnameModified = userSurname[0].toUpperCase() + userSurname.substring(1).toLowerCase();
 
 console.log('Фамилия и имя: ' + userNameModified + ' ' + userSurnameModified);
 
