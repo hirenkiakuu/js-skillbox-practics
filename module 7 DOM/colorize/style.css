@@ -1,0 +1,7 @@
+.color-block {
+    margin-top: 5px;
+    width: 500px;
+    height: 500px;
+    border: 1px solid #000000;
+    border-radius: 10px;
+}
