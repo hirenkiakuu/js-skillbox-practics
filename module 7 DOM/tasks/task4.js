@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
             h1.textContent = object.name;
 
             const span = document.createElement('span');
-            span.textContent = 'Возраст: ' + object.age + ' лет';
+            span.textContent = `Возраст: ${object.age} лет`;
 
             li.append(h1, span);
         }
