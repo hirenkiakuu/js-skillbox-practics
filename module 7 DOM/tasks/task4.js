@@ -1,17 +1,17 @@
 document.addEventListener('DOMContentLoaded', function() {
-    let ul = document.createElement('ul');
+    const ul = document.createElement('ul');
 
     function createStudentsList(objectList) {
         document.body.append(ul);
 
         for (object of objectList) {
-            let li = document.createElement('li');
+            const li = document.createElement('li');
             ul.append(li);
 
-            let h1 = document.createElement('h1');
+            const h1 = document.createElement('h1');
             h1.textContent = object.name;
 
-            let span = document.createElement('span');
+            const span = document.createElement('span');
             span.textContent = 'Возраст: ' + object.age + ' лет';
 
             li.append(h1, span);
@@ -26,8 +26,8 @@ document.addEventListener('DOMContentLoaded', function() {
         {name: 'Антон', age: 7}
        ];
 
-    let buttonShow = document.querySelector('.button-show');
-    let buttonHide = document.querySelector('.button-hide');
+    const buttonShow = document.querySelector('.button-show');
+    const buttonHide = document.querySelector('.button-hide');
     buttonShow.addEventListener('click', () => createStudentsList(allStudents));
     buttonHide.addEventListener('click', function() {
         for (child of Array.from(ul.children)) {

@@ -1,9 +1,16 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     function createStudentCard(obj) {
-        document.body.append(document.createElement('div'));
-        document.body.children[0].appendChild(document.createElement('h1')).textContent = obj.name;
-        document.body.children[0].appendChild(document.createElement('span')).textContent = 'Возраст: ' + obj.age + ' лет';
+        const div = document.createElement('div');
+
+        const h1 = document.createElement('h1');
+        h1.textContent = obj.name;
+
+        const span = document.createElement('span');
+        span.textContent = `Возраст: ${obj.age} лет`;
+
+        div.append(h1, span);
+        document.body.append(div);
     }   
 
     let studentObj = {
