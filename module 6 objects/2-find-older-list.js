@@ -1,14 +1,3 @@
-function findMaxAge(users) {
-    let maxAge = 0;
-    for (user of users) {
-        if (user.age > maxAge) {
-            maxAge = user.age;
-        }
-    }
-
-    return maxAge;
-}
-
 let allUsers = [
     {name: 'Валя', age: 11},
     {name: 'Таня', age: 24},
@@ -17,4 +6,4 @@ let allUsers = [
     {name: 'Антон', age: 40}
    ];
 
-console.log(allUsers.find(user => user.age == findMaxAge(allUsers)).name);
+console.log(allUsers.sort((user1, user2) => user2.age - user1.age)[0].name);

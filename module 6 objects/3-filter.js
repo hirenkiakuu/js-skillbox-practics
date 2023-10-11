@@ -1,15 +1,3 @@
-function filter(objList, key, value) {
-    let resultArr = [];
-
-    for (let obj of objList) {
-        if (obj[key] === value) {
-            resultArr.push(obj);
-        }
-    }
-
-    return resultArr;
-}
-
 let objects = [
     { name: 'Василий', surname: 'Васильев' },
     { name: 'Иван', surname: 'Иванов' },
@@ -17,7 +5,8 @@ let objects = [
     { name: 'Пётр', surname: 'Чайковский' }
    ];
 
-// let result = filter(objects, 'name', 'Иван');
+let targetKey = 'name';
+let targetValue = 'Пётр';
 
-console.log(filter(objects, 'surname', 'Васильев'));
+console.log(objects.filter( obj => obj[targetKey] === targetValue));
    
