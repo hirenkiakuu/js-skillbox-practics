@@ -46,7 +46,7 @@
         return list;
     }
 
-    function createTodoItem(obj) {
+    function createTodoItem(obj, objList, listName) {
         const item = document.createElement('li');
         const buttonGroup = document.createElement('div');
         const doneButton = document.createElement('button');
@@ -69,6 +69,35 @@
         buttonGroup.append(deleteButton);
         item.append(buttonGroup);
 
+        doneButton.addEventListener('click', function() {
+            item.classList.toggle('list-group-item-success');
+            
+            for (obj of objList) {
+                if (obj.id === item.id) {
+                    obj.done = !obj.done;
+                    
+                }
+            }
+            setData(listName, objList);
+        });
+
+        deleteButton.addEventListener('click', function() {
+            if (confirm('Вы уверены?')) {
+                item.remove();
+
+                let index = 0;
+                for (obj of objList) {
+                    if (obj.id === item.id) {
+                        index = objList.indexOf(obj);
+                    }
+                }
+
+                objList.splice(index, 1);
+                
+                setData(listName, objList);
+            }
+        });
+
         return {
             item,
             doneButton,
@@ -86,7 +115,7 @@
 
         if (dealList.length > 0) {
             dealList.forEach(function(deal) {
-                let dealItem = createTodoItem(deal);
+                let dealItem = createTodoItem(deal, dealList, listName);
                 dealItem.item.id = deal.id;
                 todoList.append(dealItem.item);
             });
@@ -122,43 +151,9 @@
                 return;
             }
 
-            let todoItem = createTodoItem(deal);
+            let todoItem = createTodoItem(deal, dealList, listName);
 
             todoItem.item.id = deal.id;
-            console.log(todoItem.item.id);
-
-            todoItem.doneButton.addEventListener('click', function() {
-                todoItem.item.classList.toggle('list-group-item-success');
-
-  
-                for (deal of dealList) {
-                    if (deal.id === todoItem.item.id) {
-                        deal.done = !deal.done;
-                        
-                    }
-                }
-
-                setData(listName, dealList);
-            });
-
-            todoItem.deleteButton.addEventListener('click', function() {
-                
-                if (confirm('Вы уверены?')) {
-                    todoItem.item.remove();
-
-                    let index = 0;
-                    for (deal of dealList) {
-                        if (deal.id === todoItem.item.id) {
-                            index = dealList.indexOf(deal);
-                            
-                        }
-                    }
-
-                    dealList.splice(index, 1);
-                    
-                    setData(listName, dealList);
-                }
-            });
 
             todoList.append(todoItem.item);
 
