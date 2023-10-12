@@ -89,7 +89,6 @@
                 let dealItem = createTodoItem(deal);
                 dealItem.item.id = deal.id;
                 todoList.append(dealItem.item);
-                console.log(dealItem.item.id === deal.id);
             });
         }
 
@@ -128,7 +127,6 @@
             todoItem.item.id = deal.id;
             console.log(todoItem.item.id);
 
-        
             todoItem.doneButton.addEventListener('click', function() {
                 todoItem.item.classList.toggle('list-group-item-success');
 
@@ -136,11 +134,10 @@
                 for (deal of dealList) {
                     if (deal.id === todoItem.item.id) {
                         deal.done = !deal.done;
-                        console.log(deal.id === todoItem.item.id);
+                        
                     }
                 }
 
-                console.log(dealList);
                 setData(listName, dealList);
             });
 
@@ -153,12 +150,12 @@
                     for (deal of dealList) {
                         if (deal.id === todoItem.item.id) {
                             index = dealList.indexOf(deal);
-                            console.log(deal.id === todoItem.item.id);
+                            
                         }
                     }
 
                     dealList.splice(index, 1);
-                    console.log(dealList);
+                    
                     setData(listName, dealList);
                 }
             });
