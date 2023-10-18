@@ -1,0 +1,62 @@
+body {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+.options-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    max-width: 200px;
+}
+
+.main-container {
+    padding-top: 100px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 500px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.container {
+    max-width: 500px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.container div {
+    width: 100px; 
+    height: 140px;
+    background-color:rgb(187, 233, 208);
+    margin: 10px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid black;
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.container div.hidden {
+    background-color: rgb(203, 203, 203);
+}
+
+.confirm-button {
+    background-color: rgb(57, 119, 242);
+    border: 2px solid black;
+    border-radius: 5px;
+    text-transform: uppercase;
+    padding: 10px 10px;
+    cursor: pointer;
+    transition: linear .10s;
+}
+
+.confirm-button:hover {
+    background-color: rgb(50, 106, 217);
+}

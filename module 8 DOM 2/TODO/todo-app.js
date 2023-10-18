@@ -75,7 +75,6 @@
             for (obj of objList) {
                 if (obj.id === item.id) {
                     obj.done = !obj.done;
-                    
                 }
             }
             setData(listName, objList);
@@ -152,7 +151,6 @@
             }
 
             let todoItem = createTodoItem(deal, dealList, listName);
-
             todoItem.item.id = deal.id;
 
             todoList.append(todoItem.item);
