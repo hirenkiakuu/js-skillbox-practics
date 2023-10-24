@@ -1,11 +1,9 @@
 // 1) Добавить фильтры
 // 2) Дописать сортировку
-// 3) Сделать валидацию
+// 3) Сделать валидацию - написал, но стоит пересмотреть
 
 document.addEventListener('DOMContentLoaded', () => {
-    const studentsList = [
-        
-    ];
+    const studentsList = [];
     
     // Различные сортировки
     function sortName(studentsArray) {
@@ -42,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Создание одной строчки со студентом
     
-    function createStudentRow(studentObj) { //студент с полями 
+    function createStudentRow(studentObj) { 
         const studentRow = document.createElement('tr');
         
         const fullNameTd = document.createElement('td');
@@ -52,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
         fullNameTd.textContent = `${studentObj.surname} ${studentObj.name} ${studentObj.middlename}`;
         facultyTd.textContent = studentObj.faculty;
-        dateOfBirthTd.textContent = studentObj.dateOfBirth;
+        dateOfBirthTd.textContent = `${studentObj.dateOfBirth.getDate()}.${studentObj.dateOfBirth.getMonth()}.${studentObj.dateOfBirth.getFullYear()} (${age = 'Возраст'})`;
         yearsOfStudyTd.textContent = `${studentObj.startOfStudying} - ${Number(studentObj.startOfStudying) + 4}`;
         
         // Доработать вычисление возраста и флажок на окончание учебы
@@ -65,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         );
     
         console.log('11111');
-        // let a = prompt();
+        
         return studentRow; //tr
     }
     
@@ -94,34 +92,63 @@ document.addEventListener('DOMContentLoaded', () => {
     
         const confirmButton = document.querySelector('.btn');
         confirmButton.addEventListener('click', () => {
-            const studentObj = {
-                surname: surNameInput.value, 
-                name: nameInput.value,
-                middlename: middleNameInput.value,
-                faculty: facultyInput.value,
-                dateOfBirth: birthDateInput.value,
-                startOfStudying: studyStartInput.value,
-            };
 
-            studentsList.push(studentObj);
-            renderStudentsTable(studentsList);
+            if (validateDateOfBirth(new Date(birthDateInput.valueAsDate)) && validateStartStudyingYear(studyStartInput.value)) {
+                const studentObj = {
+                    surname: surNameInput.value, 
+                    name: nameInput.value,
+                    middlename: middleNameInput.value,
+                    faculty: facultyInput.value,
+                    dateOfBirth: new Date(birthDateInput.valueAsDate),
+                    startOfStudying: studyStartInput.value,
+                };
+
+                studentsList.push(studentObj);
+                renderStudentsTable(studentsList);
+            }
+            
+
+            // console.log(`${studentObj.dateOfBirth.getDate()}.${studentObj.dateOfBirth.getMonth()}.${studentObj.dateOfBirth.getFullYear()}`);
+
+            // if (validateDateOfBirth(studentObj.dateOfBirth)) {
+            //     console.log('sheeeeesh');
+            // }
+
+            
+            surNameInput.value = '';
+            nameInput.value = '';
+            middleNameInput.value = '';
+            facultyInput.value = '';
+            birthDateInput.value = '';
+            studyStartInput.value = '';
+            
             console.log(studentsList);
         });
 
 
         console.log(studentsList);
-        
-    
     }
-    
+
+    // Валидация даты рождения
+    function validateDateOfBirth(inputDate) {
+        // 
+        const minDate = new Date(1900, 0, 1);
+        const now = new Date();
+
+        return (minDate <= inputDate) && (inputDate < now);
+    }
+
+    // Валидация года начала учебы
+    function validateStartStudyingYear(year) {
+        return (year >= 2000) && (year <= 2023);
+    }
+
     // renderStudentsTable(studentsList.slice());
 
-    function start(studentsArray) {
-        getUserInput(studentsArray);
-    }
-
-    start(studentsList)
+    getUserInput(studentsList);
     
+
+    // Кнопки на head ячейках
     // const nameSortButton = document.getElementById('name');
     // nameSortButton.addEventListener('click', () => {
     //     const newStudentsList = sortName(studentsList.slice());
