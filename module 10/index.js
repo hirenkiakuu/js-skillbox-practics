@@ -46,14 +46,29 @@ document.addEventListener('DOMContentLoaded', () => {
     // Различные сортировки
     // лучше сделать function sortByKey() {}
     function sortName(studentsArray) {
+        
+    }
+
+    function sortStudentsArray(studentsArray, key) {
         const sortedStudentsArray = studentsArray.slice().sort((student, prevStudent) => {
-            const studentFullName = (student.surname + student.name + student.middlename).toLowerCase();
-            const prevStudentFullName = (prevStudent.surname + prevStudent.name + prevStudent.middlename).toLowerCase();
+
+            let currentValue = student[key];
+            let prevValue = prevStudent[key];
+
+            if (key === 'name') {
+                currentValue = (student.surname + student.name + student.middlename).toLowerCase();
+                prevValue = (prevStudent.surname + prevStudent.name + prevStudent.middlename).toLowerCase();
+            }
+
+            console.log('11111');
+
+            // const studentFullName = (student.surname + student.name + student.middlename).toLowerCase();
+            // const prevStudentFullName = (prevStudent.surname + prevStudent.name + prevStudent.middlename).toLowerCase();
     
-            if (studentFullName > prevStudentFullName) {
+            if (currentValue > prevValue) {
                 return 1;
             }
-            if (studentFullName < prevStudentFullName) {
+            if (currentValue < prevValue) {
                 return -1;
             }
             return 0;
@@ -61,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     
         return sortedStudentsArray;
+        
     }
 
     // function sortFaculty(studentsArray) {
@@ -229,8 +245,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // Кнопки на head ячейках
     const nameSortButton = document.getElementById('name');
     nameSortButton.addEventListener('click', () => {
-        // const newStudentsList = ;
-        renderStudentsTable(sortName(studentsList.slice()));
+        renderStudentsTable(sortStudentsArray(studentsList.slice(), 'name'));
+    });
+
+    const facultySortButton = document.getElementById('faculty');
+    facultySortButton.addEventListener('click', () => {
+        renderStudentsTable(sortStudentsArray(studentsList.slice(), 'faculty'));
+    });
+
+    const birthDateSortButton = document.getElementById('birth-date');
+    birthDateSortButton.addEventListener('click', () => {
+        renderStudentsTable(sortStudentsArray(studentsList.slice(), 'dateOfBirth'));
+    });
+
+    const studyingDateSortButton = document.getElementById('study');
+    studyingDateSortButton.addEventListener('click', () => {
+        renderStudentsTable(sortStudentsArray(studentsList.slice(), 'startOfStudying'));
     });
     // Нужно будет разобраться со слайсами 
 
