@@ -1,6 +1,7 @@
-// 1) Добавить фильтры
+// 1) Добавить фильтры - добавлены, нужно проверить
 // 2) Дописать сортировку
-// 3) Сделать валидацию - написал, но стоит пересмотреть
+// 3) Сделать валидацию - сделано
+// 4) Вывести ошибки пользователя над кнопкой
 
 document.addEventListener('DOMContentLoaded', () => {
     const studentsList = [];
@@ -61,17 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
         return sortedStudentsArray;
     }
-    
-    // Фильтрация
-    function filterStudentsArray(studentsArray, inputValue) {
-        const filteredStudentsArray = studentsArray.filter((student) => {
-            return student.name.includes(inputValue);
-        });
-
-        console.log(filteredStudentsArray);
-
-        return filteredStudentsArray;
-    }
 
     // function sortFaculty(studentsArray) {
 
@@ -85,6 +75,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // }
     
+    function filterStudentsArray(studentsArray, inputValue, key) {
+        if (key === 'name') {
+            return studentsArray.filter((student) => {
+                return (student.surname + student.name + student.middlename).includes(inputValue);
+            });
+        }
+        else if (key === 'faculty') {
+            return studentsArray.filter((student) => {
+                return (student[key]).includes(inputValue);
+            });
+        }
+        else if (key === 'start') {
+            return studentsArray.filter((student) => {
+                return (student.startOfStudying).includes(inputValue);
+            });
+        }
+        else {
+            return studentsArray.filter((student) => {
+                return String(Number(student.startOfStudying) + 4).includes(inputValue);
+            });
+        }
+    }
 
     // Создание одной строчки со студентом
     
@@ -107,8 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
             dateOfBirthTd,
             yearsOfStudyTd
         );
-    
-        console.log('11111'); // удалить потом
         
         return studentRow; //tr
     }
@@ -136,6 +146,17 @@ document.addEventListener('DOMContentLoaded', () => {
     
         const confirmButton = document.querySelector('.btn');
         confirmButton.addEventListener('click', () => {
+            if (
+                surNameInput.value.trim() === '' ||
+                nameInput.value.trim() === '' ||
+                middleNameInput.value.trim() === '' || 
+                birthDateInput.value.trim() === '' ||
+                facultyInput.value.trim() === '' ||
+                studyStartInput.value.trim() === ''
+            ) {
+                return;
+            }
+
 
             if (validateDateOfBirth(new Date(birthDateInput.valueAsDate)) && validateStartStudyingYear(studyStartInput.value)) {
                 const studentObj = {
@@ -160,8 +181,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             console.log(studentsList);
         });
-
-        console.log(studentsList);
     }
 
     // Валидация даты рождения
@@ -183,10 +202,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // eventlisteners на filter input'ах
 
+    // ФИО
     const nameFilterInput = document.getElementById('name-filter');
     nameFilterInput.addEventListener('input', () => {
-        // const filteredStudentsArray = ;
-        renderStudentsTable(filterStudentsArray(studentsList, nameFilterInput.value));
+        renderStudentsTable(filterStudentsArray(studentsList, nameFilterInput.value, 'name'));
+    });
+
+    // Факультет
+    const facultyFilterInput = document.getElementById('faculty-filter');
+    facultyFilterInput.addEventListener('input', () => {
+        renderStudentsTable(filterStudentsArray(studentsList, facultyFilterInput.value, 'faculty'));
+    });
+
+    // Дата обучения
+    const studyingStartFilterInput = document.getElementById('studying-start-filter');
+    studyingStartFilterInput.addEventListener('input', () => {
+        renderStudentsTable(filterStudentsArray(studentsList, studyingStartFilterInput.value, 'start'));
+    });
+
+    const studyingEndFilterInput = document.getElementById('studying-end-filter');
+    studyingEndFilterInput.addEventListener('input', () => {
+        renderStudentsTable(filterStudentsArray(studentsList, studyingEndFilterInput.value, 'end'));
     });
     
 
