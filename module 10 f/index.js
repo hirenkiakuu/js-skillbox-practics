@@ -4,10 +4,47 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     const studentsList = [];
-    
-    // Различные сортировки
-    function sortName(studentsArray) {
+
+    // вычисление возраста, курса и форматирование времени
+    function getStudentAge(birthDate) {
+        const now = new Date();
         
+        const age = now.getFullYear() - birthDate.getFullYear();
+
+        if (
+            now.getMonth() < birthDate.getMonth() || 
+            (now.getMonth() === birthDate.getMonth() && now.getDate() < birthDate.getDate())
+        ) {
+            return age - 1;
+        }
+        else {
+            return age;
+        }
+    }
+    
+    function getStudentCourseString(studyingDate) {
+        if (Number(studyingDate) <= 2019) {
+            return '(Закончил)';
+        }
+        else return `(${2023 - Number(studyingDate) + 1} курс)`;
+    }
+
+    function formatTime(date) {
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+
+        const formattedDay = day < 10 ? `0${day}` : day;
+        const formattedMonth = month < 10 ? `0${month}` : month;
+
+        const formattedDate = `${formattedDay}.${formattedMonth}.${year}`;
+
+        return formattedDate;
+    }
+
+    // Различные сортировки
+    // лучше сделать function sortByKey() {}
+    function sortName(studentsArray) {
         const sortedStudentsArray = studentsArray.slice().sort((student, prevStudent) => {
             const studentFullName = (student.surname + student.name + student.middlename).toLowerCase();
             const prevStudentFullName = (prevStudent.surname + prevStudent.name + prevStudent.middlename).toLowerCase();
@@ -23,6 +60,17 @@ document.addEventListener('DOMContentLoaded', () => {
     
     
         return sortedStudentsArray;
+    }
+    
+    // Фильтрация
+    function filterStudentsArray(studentsArray, inputValue) {
+        const filteredStudentsArray = studentsArray.filter((student) => {
+            return student.name.includes(inputValue);
+        });
+
+        console.log(filteredStudentsArray);
+
+        return filteredStudentsArray;
     }
 
     // function sortFaculty(studentsArray) {
@@ -50,10 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
         fullNameTd.textContent = `${studentObj.surname} ${studentObj.name} ${studentObj.middlename}`;
         facultyTd.textContent = studentObj.faculty;
-        dateOfBirthTd.textContent = `${studentObj.dateOfBirth.getDate()}.${studentObj.dateOfBirth.getMonth()}.${studentObj.dateOfBirth.getFullYear()} (${age = 'Возраст'})`;
-        yearsOfStudyTd.textContent = `${studentObj.startOfStudying} - ${Number(studentObj.startOfStudying) + 4}`;
-        
-        // Доработать вычисление возраста и флажок на окончание учебы
+        dateOfBirthTd.textContent = formatTime(studentObj.dateOfBirth);
+        yearsOfStudyTd.textContent = `${studentObj.startOfStudying} - ${Number(studentObj.startOfStudying) + 4} ${getStudentCourseString(studentObj.startOfStudying)}`;
 
         studentRow.append(
             fullNameTd, 
@@ -62,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
             yearsOfStudyTd
         );
     
-        console.log('11111');
+        console.log('11111'); // удалить потом
         
         return studentRow; //tr
     }
@@ -81,14 +127,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Пользовательский ввод студента ---> добавление студента в массив // нужна валидация
     function getUserInput(studentsArray) {
-        
         const surNameInput = document.getElementById('surNameInput');
         const nameInput = document.getElementById('nameInput');
         const middleNameInput = document.getElementById('middleNameInput');
         const birthDateInput = document.getElementById('birthDateInput');
         const facultyInput = document.getElementById('facultyInput');
         const studyStartInput = document.getElementById('studyStartInput');
-
     
         const confirmButton = document.querySelector('.btn');
         confirmButton.addEventListener('click', () => {
@@ -107,14 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderStudentsTable(studentsList);
             }
             
-
-            // console.log(`${studentObj.dateOfBirth.getDate()}.${studentObj.dateOfBirth.getMonth()}.${studentObj.dateOfBirth.getFullYear()}`);
-
-            // if (validateDateOfBirth(studentObj.dateOfBirth)) {
-            //     console.log('sheeeeesh');
-            // }
-
-            
             surNameInput.value = '';
             nameInput.value = '';
             middleNameInput.value = '';
@@ -125,13 +161,11 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(studentsList);
         });
 
-
         console.log(studentsList);
     }
 
     // Валидация даты рождения
     function validateDateOfBirth(inputDate) {
-        // 
         const minDate = new Date(1900, 0, 1);
         const now = new Date();
 
@@ -146,14 +180,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // renderStudentsTable(studentsList.slice());
 
     getUserInput(studentsList);
+
+    // eventlisteners на filter input'ах
+
+    const nameFilterInput = document.getElementById('name-filter');
+    nameFilterInput.addEventListener('input', () => {
+        // const filteredStudentsArray = ;
+        renderStudentsTable(filterStudentsArray(studentsList, nameFilterInput.value));
+    });
     
 
     // Кнопки на head ячейках
-    // const nameSortButton = document.getElementById('name');
-    // nameSortButton.addEventListener('click', () => {
-    //     const newStudentsList = sortName(studentsList.slice());
-    //     renderStudentsTable(newStudentsList);
-    // });
+    const nameSortButton = document.getElementById('name');
+    nameSortButton.addEventListener('click', () => {
+        // const newStudentsList = ;
+        renderStudentsTable(sortName(studentsList.slice()));
+    });
     // Нужно будет разобраться со слайсами 
 
     

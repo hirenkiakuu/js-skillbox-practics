@@ -11,14 +11,41 @@
           background-color: #b1b1b1;
           cursor: pointer;
         }
+
+        .input-container {
+            width: 200px;
+            margin-right: 10px;
+        }
       </style>
     <title>Document</title>
 </head>
 <body>
+    <div class="container mt-5" style="display:flex">
+        <div class="mr-2 input-container">
+            <label for="surNameInput" class="form-label">ФИО</label>
+            <input type="text" class="form-control filter" id="name-filter">
+        </div>
+
+        <div class="mr-2 input-container">
+            <label for="surNameInput" class="form-label">Факультет</label>
+            <input type="text" class="form-control filter" id="faculty-filter">
+        </div>
+
+        <div class="mr-2 input-container">
+            <label for="surNameInput" class="form-label">Год начала обучения</label>
+            <input type="text" class="form-control filter" id="studying-start-filter">
+        </div>
+
+        <div class="mr-2 input-container">
+            <label for="surNameInput" class="form-label">Год конца обучения</label>
+            <input type="text" class="form-control filter" id="studying-end-filter">
+        </div>
+    </div>
+
     <div class="container mt-5">
         <table class="table table-bordered">
             <caption>Список студентов</caption>
-            <thead  class="table-dark">
+            <thead class="table-dark">
                 <tr>
                     <th scope="col" id="name">Ф. И. О. студента</th>
                     <th scope="col" id="faculty">Факультет</th>
@@ -38,7 +65,7 @@
         
             <div class="mb-3">
               <label for="surNameInput" class="form-label">Фамилия</label>
-              <input class="form-control" id="surNameInput">
+              <input class="form-control" id="surNameInput" required>
               
             </div>
 
