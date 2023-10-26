@@ -1,7 +1,7 @@
 // 1) Добавить фильтры - добавлены, нужно проверить
-// 2) Дописать сортировку
+// 2) Дописать сортировку - проверить
 // 3) Сделать валидацию - сделано
-// 4) Вывести ошибки пользователя над кнопкой
+// 4) Вывести ошибки пользователя над кнопкой - сделано
 
 document.addEventListener('DOMContentLoaded', () => {
     const studentsList = [];
@@ -45,10 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Различные сортировки
     // лучше сделать function sortByKey() {}
-    function sortName(studentsArray) {
-        
-    }
-
+   
     function sortStudentsArray(studentsArray, key) {
         const sortedStudentsArray = studentsArray.slice().sort((student, prevStudent) => {
 
@@ -79,18 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
     }
 
-    // function sortFaculty(studentsArray) {
-
-    // }
-
-    // function sortBirthDate() {
-
-    // }
-
-    // function sortStudyYears() {
-
-    // }
-    
     function filterStudentsArray(studentsArray, inputValue, key) {
         if (key === 'name') {
             return studentsArray.filter((student) => {
@@ -161,6 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const studyStartInput = document.getElementById('studyStartInput');
     
         const confirmButton = document.querySelector('.btn');
+        const label = document.querySelector('.alert-label');
+
         confirmButton.addEventListener('click', () => {
             if (
                 surNameInput.value.trim() === '' ||
@@ -170,23 +157,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 facultyInput.value.trim() === '' ||
                 studyStartInput.value.trim() === ''
             ) {
+                label.textContent = 'Не все поля заполнены';
                 return;
+            } else {
+                if (validateDateOfBirth(new Date(birthDateInput.valueAsDate)) && validateStartStudyingYear(studyStartInput.value)) {
+                    label.textContent = '';
+                    const studentObj = {
+                        surname: surNameInput.value, 
+                        name: nameInput.value,
+                        middlename: middleNameInput.value,
+                        faculty: facultyInput.value,
+                        dateOfBirth: new Date(birthDateInput.valueAsDate),
+                        startOfStudying: studyStartInput.value,
+                    };
+    
+                    studentsList.push(studentObj);
+                    renderStudentsTable(studentsList);
+                }
+                else {
+                    if (validateDateOfBirth(new Date(birthDateInput.valueAsDate)) === false) {
+                        label.textContent = 'Минимальный год рождения - 1900 г.';
+                    }
+                    else if (validateStartStudyingYear(studyStartInput.value) === false) {
+                        label.textContent = 'Минимальный год начала обучения - 2000 г.';
+                    }
+                }
             }
 
-
-            if (validateDateOfBirth(new Date(birthDateInput.valueAsDate)) && validateStartStudyingYear(studyStartInput.value)) {
-                const studentObj = {
-                    surname: surNameInput.value, 
-                    name: nameInput.value,
-                    middlename: middleNameInput.value,
-                    faculty: facultyInput.value,
-                    dateOfBirth: new Date(birthDateInput.valueAsDate),
-                    startOfStudying: studyStartInput.value,
-                };
-
-                studentsList.push(studentObj);
-                renderStudentsTable(studentsList);
-            }
+            
             
             surNameInput.value = '';
             nameInput.value = '';
