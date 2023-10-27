@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function filterStudentsArray(studentsArray, inputValue, key) {
         if (key === 'name') {
             return studentsArray.filter((student) => {
-                return (student.surname + student.name + student.middlename).includes(inputValue);
+                return (student.surname + ' ' + student.name + ' ' + student.middlename).includes(inputValue);
             });
         }
         else if (key === 'faculty') {
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
         fullNameTd.textContent = `${studentObj.surname} ${studentObj.name} ${studentObj.middlename}`;
         facultyTd.textContent = studentObj.faculty;
-        dateOfBirthTd.textContent = formatTime(studentObj.dateOfBirth);
+        dateOfBirthTd.textContent = `${formatTime(studentObj.dateOfBirth)} (${getStudentAge(studentObj.dateOfBirth)} лет)`;
         yearsOfStudyTd.textContent = `${studentObj.startOfStudying} - ${Number(studentObj.startOfStudying) + 4} ${getStudentCourseString(studentObj.startOfStudying)}`;
 
         studentRow.append(
