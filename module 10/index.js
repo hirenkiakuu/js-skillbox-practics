@@ -23,11 +23,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    function getStudentCourseString(studyingDate) {
+    function formatStudentCourse(studyingDate) {
         if (Number(studyingDate) <= 2019) {
             return '(Закончил)';
         }
-        else return `(${2023 - Number(studyingDate) + 1} курс)`;
+        return `(${2023 - Number(studyingDate) + 1} курс)`;
+    }
+
+    function formatFullName(studentObj) {
+        return `${studentObj.surname} ${studentObj.name} ${studentObj.middlename}`;
+    }
+
+    function formatYearsOfStudy(studentObj) {
+        return `${studentObj.startOfStudying} - ${Number(studentObj.startOfStudying) + 4} ${formatStudentCourse(studentObj.startOfStudying)}`;
     }
 
     function formatTime(date) {
@@ -43,9 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return formattedDate;
     }
 
-    // Различные сортировки
-    // лучше сделать function sortByKey() {}
-   
     function sortStudentsArray(studentsArray, key) {
         const sortedStudentsArray = studentsArray.slice().sort((student, prevStudent) => {
 
@@ -56,11 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentValue = (student.surname + student.name + student.middlename).toLowerCase();
                 prevValue = (prevStudent.surname + prevStudent.name + prevStudent.middlename).toLowerCase();
             }
-
-            console.log('11111');
-
-            // const studentFullName = (student.surname + student.name + student.middlename).toLowerCase();
-            // const prevStudentFullName = (prevStudent.surname + prevStudent.name + prevStudent.middlename).toLowerCase();
     
             if (currentValue > prevValue) {
                 return 1;
@@ -69,33 +69,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 return -1;
             }
             return 0;
-        }); // Возможно, стоит поменять компаратор тут
-    
+        }); 
     
         return sortedStudentsArray;
-        
     }
 
     function filterStudentsArray(studentsArray, inputValue, key) {
         if (key === 'name') {
-            return studentsArray.filter((student) => {
-                return (student.surname + ' ' + student.name + ' ' + student.middlename).includes(inputValue);
-            });
+            return studentsArray.filter(student => 
+                (student.surname + ' ' + student.name + ' ' + student.middlename).toLowerCase().includes(inputValue.toLowerCase()));
         }
         else if (key === 'faculty') {
-            return studentsArray.filter((student) => {
-                return (student[key]).includes(inputValue);
-            });
+            return studentsArray.filter(student => (student[key]).includes(inputValue));
         }
         else if (key === 'start') {
-            return studentsArray.filter((student) => {
-                return (student.startOfStudying).includes(inputValue);
-            });
+            return studentsArray.filter(student => student.startOfStudying.includes(inputValue));
         }
         else {
-            return studentsArray.filter((student) => {
-                return String(Number(student.startOfStudying) + 4).includes(inputValue);
-            });
+            return studentsArray.filter(student => 
+                String(Number(student.startOfStudying) + 4).includes(inputValue));
         }
     }
 
@@ -109,10 +101,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const dateOfBirthTd = document.createElement('td');
         const yearsOfStudyTd = document.createElement('td');
     
-        fullNameTd.textContent = `${studentObj.surname} ${studentObj.name} ${studentObj.middlename}`;
+        fullNameTd.textContent = formatFullName(studentObj);
         facultyTd.textContent = studentObj.faculty;
         dateOfBirthTd.textContent = `${formatTime(studentObj.dateOfBirth)} (${getStudentAge(studentObj.dateOfBirth)} лет)`;
-        yearsOfStudyTd.textContent = `${studentObj.startOfStudying} - ${Number(studentObj.startOfStudying) + 4} ${getStudentCourseString(studentObj.startOfStudying)}`;
+        yearsOfStudyTd.textContent = formatYearsOfStudy(studentObj);
 
         studentRow.append(
             fullNameTd, 
@@ -124,6 +116,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return studentRow; //tr
     }
     
+    function displayError(message) {
+        const label = document.querySelector('.alert-label');
+        label.textContent = message;
+    }
 
     // Отрисовка внутреннего содержания таблицы
     function renderStudentsTable(studentsArray) {
@@ -136,64 +132,53 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Пользовательский ввод студента ---> добавление студента в массив // нужна валидация
+    // Пользовательский ввод студента ---> добавление студента в массив
     function getUserInput(studentsArray) {
-        const surNameInput = document.getElementById('surNameInput');
-        const nameInput = document.getElementById('nameInput');
-        const middleNameInput = document.getElementById('middleNameInput');
-        const birthDateInput = document.getElementById('birthDateInput');
-        const facultyInput = document.getElementById('facultyInput');
-        const studyStartInput = document.getElementById('studyStartInput');
-    
-        const confirmButton = document.querySelector('.btn');
-        const label = document.querySelector('.alert-label');
+        const inputs = [
+            document.getElementById('surNameInput'),
+            document.getElementById('nameInput'),
+            document.getElementById('middleNameInput'),
+            document.getElementById('birthDateInput'),
+            document.getElementById('facultyInput'),
+            document.getElementById('studyStartInput')
+        ];
 
+        const confirmButton = document.querySelector('.btn');
+        
         confirmButton.addEventListener('click', () => {
-            if (
-                surNameInput.value.trim() === '' ||
-                nameInput.value.trim() === '' ||
-                middleNameInput.value.trim() === '' || 
-                birthDateInput.value.trim() === '' ||
-                facultyInput.value.trim() === '' ||
-                studyStartInput.value.trim() === ''
-            ) {
-                label.textContent = 'Не все поля заполнены';
+            const isEmpty = inputs.some(input => input.value.trim() === '');
+
+            if (isEmpty) {
+                displayError('Не все поля заполнены');
                 return;
-            } else {
-                if (validateDateOfBirth(new Date(birthDateInput.valueAsDate)) && validateStartStudyingYear(studyStartInput.value)) {
-                    label.textContent = '';
+            } 
+            else {
+                if (validateDateOfBirth(new Date(inputs[3].valueAsDate)) && validateStartStudyingYear(inputs[5].value)) {
+                    displayError('');
+
                     const studentObj = {
-                        surname: surNameInput.value, 
-                        name: nameInput.value,
-                        middlename: middleNameInput.value,
-                        faculty: facultyInput.value,
-                        dateOfBirth: new Date(birthDateInput.valueAsDate),
-                        startOfStudying: studyStartInput.value,
+                        surname: inputs[0].value, 
+                        name: inputs[1].value,
+                        middlename: inputs[2].value,
+                        faculty: inputs[4].value,
+                        dateOfBirth: new Date(inputs[3].valueAsDate),
+                        startOfStudying: inputs[5].value,
                     };
     
-                    studentsList.push(studentObj);
+                    studentsArray.push(studentObj);
                     renderStudentsTable(studentsList);
                 }
                 else {
-                    if (validateDateOfBirth(new Date(birthDateInput.valueAsDate)) === false) {
-                        label.textContent = 'Минимальный год рождения - 1900 г.';
+                    if (validateDateOfBirth(new Date(inputs[3].valueAsDate)) === false) {
+                        displayError('Минимальный год рождения - 1900 г.');
                     }
-                    else if (validateStartStudyingYear(studyStartInput.value) === false) {
-                        label.textContent = 'Минимальный год начала обучения - 2000 г.';
+                    else if (validateStartStudyingYear(inputs[5].value) === false) {
+                        displayError('Минимальный год начала обучения - 2000 г.');
                     }
                 }
             }
 
-            
-            
-            surNameInput.value = '';
-            nameInput.value = '';
-            middleNameInput.value = '';
-            facultyInput.value = '';
-            birthDateInput.value = '';
-            studyStartInput.value = '';
-            
-            console.log(studentsList);
+            inputs.forEach(input => input.value = '');
         });
     }
 
@@ -210,67 +195,36 @@ document.addEventListener('DOMContentLoaded', () => {
         return (year >= 2000) && (year <= 2023);
     }
 
-    // renderStudentsTable(studentsList.slice());
+    const filterInputs = [
+        document.getElementById('name-filter'),
+        document.getElementById('faculty-filter'),
+        document.getElementById('studying-start-filter'),
+        document.getElementById('studying-end-filter')
+    ];
 
+    const sortButtons = [
+        document.getElementById('name'),
+        document.getElementById('faculty'),
+        document.getElementById('birth-date'),
+        document.getElementById('study')
+    ];
+
+    filterInputs.forEach((input, index) => {
+        input.addEventListener('input', () => {
+            const key = index === 0 ? 'name' : index === 1 ? 'faculty' : index === 2 ? 'start' : 'end'; 
+            renderStudentsTable(filterStudentsArray(studentsList, input.value, key));
+        });
+    });
+
+    sortButtons.forEach((sortButton, index) => {
+        sortButton.addEventListener('click', () => {
+            const key = index === 0 ? 'name' : index === 1 ? 'faculty' : index === 2 ? 'dateOfBirth' : 'startOfStudying';
+            renderStudentsTable(sortStudentsArray(studentsList.slice(), key));
+        });
+    });
+ 
     getUserInput(studentsList);
-
-    // eventlisteners на filter input'ах
-
-    // ФИО
-    const nameFilterInput = document.getElementById('name-filter');
-    nameFilterInput.addEventListener('input', () => {
-        renderStudentsTable(filterStudentsArray(studentsList, nameFilterInput.value, 'name'));
-    });
-
-    // Факультет
-    const facultyFilterInput = document.getElementById('faculty-filter');
-    facultyFilterInput.addEventListener('input', () => {
-        renderStudentsTable(filterStudentsArray(studentsList, facultyFilterInput.value, 'faculty'));
-    });
-
-    // Дата обучения
-    const studyingStartFilterInput = document.getElementById('studying-start-filter');
-    studyingStartFilterInput.addEventListener('input', () => {
-        renderStudentsTable(filterStudentsArray(studentsList, studyingStartFilterInput.value, 'start'));
-    });
-
-    const studyingEndFilterInput = document.getElementById('studying-end-filter');
-    studyingEndFilterInput.addEventListener('input', () => {
-        renderStudentsTable(filterStudentsArray(studentsList, studyingEndFilterInput.value, 'end'));
-    });
-    
-
-    // Кнопки на head ячейках
-    const nameSortButton = document.getElementById('name');
-    nameSortButton.addEventListener('click', () => {
-        renderStudentsTable(sortStudentsArray(studentsList.slice(), 'name'));
-    });
-
-    const facultySortButton = document.getElementById('faculty');
-    facultySortButton.addEventListener('click', () => {
-        renderStudentsTable(sortStudentsArray(studentsList.slice(), 'faculty'));
-    });
-
-    const birthDateSortButton = document.getElementById('birth-date');
-    birthDateSortButton.addEventListener('click', () => {
-        renderStudentsTable(sortStudentsArray(studentsList.slice(), 'dateOfBirth'));
-    });
-
-    const studyingDateSortButton = document.getElementById('study');
-    studyingDateSortButton.addEventListener('click', () => {
-        renderStudentsTable(sortStudentsArray(studentsList.slice(), 'startOfStudying'));
-    });
-    // Нужно будет разобраться со слайсами 
-
-    
 });
-
-
-// (() => {
-    
-    
-// })();
-
 
 
 
