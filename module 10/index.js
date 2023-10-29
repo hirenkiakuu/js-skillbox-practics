@@ -18,9 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ) {
             return age - 1;
         }
-        else {
-            return age;
-        }
+        
+        return age;  
     }
     
     function formatStudentCourse(studyingDate) {
